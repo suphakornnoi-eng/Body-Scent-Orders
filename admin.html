@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>รายการสั่งซื้อ — Body Scent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Noto+Sans+Thai:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+Thai:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --font-serif: "Cormorant Garamond", "Noto Serif Thai", Georgia, serif;
+    }
+    .logo { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; }
+    .page-title { font-family: var(--font-serif); font-weight: 500; font-size: clamp(2rem, 5vw, 3rem); }
+    .site-footer .tagline { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); }
+
+    /* ตารางออเดอร์ */
+    .table-wrap {
+      margin-top: 2rem;
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+    #ordersTable {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      font-size: .93rem;
+    }
+    #ordersTable th,
+    #ordersTable td {
+      padding: .85rem 1rem;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+    #ordersTable th {
+      background: var(--paper);
+      font: 500 .9rem/1.4 var(--font-display);
+      white-space: nowrap;
+    }
+    #ordersTable td:nth-child(5),
+    #ordersTable th:nth-child(5) { text-align: right; white-space: nowrap; }
+    #ordersTable tbody tr:last-child td { border-bottom: 0; }
+    #ordersTable tbody tr:hover td { background: var(--paper); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">Body Scent</a>
+      <ul class="nav">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="product.html">สินค้า</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <h1 class="page-title">รายการสั่งซื้อ</h1>
+      <p class="section-sub">เรียงจากรายการล่าสุดขึ้นก่อน</p>
+
+      <div class="table-wrap">
+        <table id="ordersTable">
+          <thead>
+            <tr>
+              <th scope="col">วันเวลา</th>
+              <th scope="col">ชื่อลูกค้า</th>
+              <th scope="col">เบอร์โทร/Line</th>
+              <th scope="col">รายการสินค้า</th>
+              <th scope="col">จำนวนเงินรวม</th>
+              <th scope="col">หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="tagline">Find Your Scent, Feel Your Best.</p>
+      <p>&copy; 2026 Body Scent</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

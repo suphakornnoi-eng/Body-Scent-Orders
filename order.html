@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>สั่งซื้อสินค้า — Body Scent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Noto+Sans+Thai:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+Thai:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --font-serif: "Cormorant Garamond", "Noto Serif Thai", Georgia, serif;
+    }
+    .logo { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; }
+    .page-title { font-family: var(--font-serif); font-weight: 500; font-size: clamp(2rem, 5vw, 3rem); }
+    .site-footer .tagline { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); }
+
+    /* ฟอร์มสั่งซื้อ */
+    .order-wrap { max-width: 560px; }
+    .order-form {
+      display: grid;
+      gap: 1.25rem;
+      margin-top: 2rem;
+      padding: 2rem 1.75rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+    .field { display: grid; gap: .4rem; }
+    .field label { font-weight: 500; font-size: .95rem; }
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--ink);
+      font: inherit;
+      transition: border-color .2s ease;
+    }
+    .field input:hover,
+    .field textarea:hover { border-color: var(--ink-soft); }
+    .field textarea { resize: vertical; min-height: 96px; }
+    .field-hint { color: var(--ink-soft); font-size: .85rem; }
+    .order-form .btn { margin-top: .5rem; width: 100%; }
+    .order-form .btn:disabled { opacity: .6; cursor: wait; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">Body Scent</a>
+      <ul class="nav">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="product.html">สินค้า</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container order-wrap">
+      <h1 class="page-title">สั่งซื้อสินค้า</h1>
+      <p class="section-sub">กรอกชื่อและช่องทางติดต่อ ทีมงานจะติดต่อกลับเพื่อยืนยันออเดอร์</p>
+
+      <form id="orderForm" class="order-form">
+        <div class="field">
+          <label for="customerName">ชื่อลูกค้า</label>
+          <input type="text" id="customerName" name="customerName" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="contact">เบอร์โทร / Line</label>
+          <input type="text" id="contact" name="contact" autocomplete="tel" required>
+        </div>
+
+        <div class="field">
+          <label for="items">รายการสินค้า</label>
+          <input type="text" id="items" name="items" required>
+        </div>
+
+        <div class="field">
+          <label for="total">จำนวนเงินรวม (บาท)</label>
+          <input type="number" id="total" name="total" min="0" inputmode="numeric" required>
+        </div>
+
+        <div class="field">
+          <label for="note">หมายเหตุ</label>
+          <textarea id="note" name="note" placeholder="เช่น ที่อยู่จัดส่ง หรือจำนวนที่ต้องการ"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">ยืนยันสั่งซื้อ</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="tagline">Find Your Scent, Feel Your Best.</p>
+      <p>&copy; 2026 Body Scent</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

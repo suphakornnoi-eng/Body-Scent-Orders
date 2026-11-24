@@ -1,0 +1,301 @@
+/* ==========================================================
+   Body Scent — style.css
+   ฟอนต์: เพิ่มบรรทัดนี้ใน <head> ของ index.html
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Noto+Sans+Thai:wght@400;500&display=swap" rel="stylesheet">
+   ========================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+  --ink: #231a33;
+  --ink-soft: #5e5570;
+  --paper: #fbfafd;
+  --line: #e6e2ee;
+
+  /* สีประจำแต่ละ mood */
+  --fresh: #17a58f;
+  --fresh-tint: #d8f4ee;
+  --sweet: #f0508f;
+  --sweet-tint: #ffe1ed;
+  --confident: #2f46d1;
+  --confident-tint: #e0e5ff;
+  --romance: #b0213f;
+  --romance-tint: #f9dce1;
+
+  /* mood ที่กำลังใช้งาน (ค่าเริ่มต้น = fresh) */
+  --mood: var(--fresh);
+  --mood-tint: var(--fresh-tint);
+
+  --font-display: "Anuphan", "Noto Sans Thai", system-ui, sans-serif;
+  --font-body: "Noto Sans Thai", "Anuphan", system-ui, sans-serif;
+
+  --radius-lg: 28px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+  --max: 1120px;
+}
+
+/* ตั้ง mood ได้ทั้งที่ body, การ์ด และปุ่มกรอง ด้วย data-mood */
+[data-mood="fresh"]     { --mood: var(--fresh);     --mood-tint: var(--fresh-tint); }
+[data-mood="sweet"]     { --mood: var(--sweet);     --mood-tint: var(--sweet-tint); }
+[data-mood="confident"] { --mood: var(--confident); --mood-tint: var(--confident-tint); }
+[data-mood="romance"]   { --mood: var(--romance);   --mood-tint: var(--romance-tint); }
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+img { display: block; max-width: 100%; height: auto; }
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: 1.25;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--mood);
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(100% - 2.5rem, var(--max));
+  margin-inline: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem 1.6rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-pill);
+  font: 500 1rem/1 var(--font-display);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s ease, background-color .2s ease, color .2s ease;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-primary:hover { background: var(--mood); }
+
+.btn-ghost { border-color: var(--ink); color: var(--ink); background: transparent; }
+.btn-ghost:hover { background: var(--ink); color: #fff; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+.logo {
+  font: 700 1.35rem/1 var(--font-display);
+  text-decoration: none;
+  letter-spacing: -.01em;
+}
+.nav { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+.nav a { text-decoration: none; color: var(--ink-soft); }
+.nav a:hover { color: var(--mood); }
+
+/* ---------- Hero ---------- */
+.hero {
+  background: var(--mood-tint);
+  transition: background-color .5s ease;
+  overflow: hidden;
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  align-items: center;
+  gap: 2.5rem;
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  max-width: 14ch;
+}
+.hero-sub {
+  margin-top: 1.25rem;
+  max-width: 44ch;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+
+.hero-media {
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg) var(--radius-lg) 50% 50%;
+  background: var(--mood);
+  transition: background-color .5s ease;
+  overflow: hidden;
+}
+.hero-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Sections ---------- */
+.section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.section-title { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+.section-sub { margin-top: .5rem; color: var(--ink-soft); max-width: 52ch; }
+
+/* ---------- Mood filters ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin: 2rem 0;
+}
+.filter-btn {
+  padding: .55rem 1.25rem;
+  border: 2px solid var(--mood);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: 500 .95rem/1 var(--font-display);
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.filter-btn:hover { background: var(--mood-tint); }
+.filter-btn.is-active,
+.filter-btn[aria-pressed="true"] { background: var(--mood); color: #fff; }
+
+/* ปุ่ม "ทั้งหมด" ไม่มี data-mood ให้ใช้สีหมึก */
+.filter-btn:not([data-mood]) { --mood: var(--ink); --mood-tint: var(--line); }
+
+/* ---------- Product grid ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.product-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--mood-tint);
+}
+.product-media img { width: 100%; height: 100%; object-fit: cover; }
+
+.product-badge {
+  position: absolute;
+  top: .9rem;
+  left: .9rem;
+  padding: .25rem .8rem;
+  border-radius: var(--radius-pill);
+  background: var(--mood);
+  color: #fff;
+  font: 500 .85rem/1.4 var(--font-display);
+}
+
+.product-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: .5rem;
+  padding: 1.1rem 1.25rem 1.4rem;
+}
+.product-name { font-size: 1.1rem; font-weight: 500; }
+.product-desc { color: var(--ink-soft); font-size: .92rem; flex: 1; }
+
+.product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: .5rem;
+}
+.product-size { color: var(--ink-soft); font-size: .9rem; }
+.product-price {
+  font: 700 1.4rem/1 var(--font-display);
+  color: var(--mood);
+}
+
+.product-card .btn { margin-top: .75rem; background: var(--mood); color: #fff; }
+.product-card .btn:hover { background: var(--ink); }
+
+.is-hidden { display: none !important; }
+
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  padding-block: 2.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: .9rem;
+}
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 800px) {
+  .hero .container { grid-template-columns: 1fr; }
+  .hero-media { max-width: 360px; justify-self: center; width: 100%; order: -1; }
+  .nav { gap: 1rem; font-size: .92rem; }
+}
+
+@media (max-width: 480px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: .75rem; }
+  .product-body { padding: .85rem .9rem 1.1rem; }
+  .product-name { font-size: 1rem; }
+  .product-desc { display: none; }
+  .nav li:not(:last-child) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

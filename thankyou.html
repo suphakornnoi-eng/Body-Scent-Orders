@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ขอบคุณที่สั่งซื้อ — Body Scent</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Noto+Sans+Thai:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+Thai:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --font-serif: "Cormorant Garamond", "Noto Serif Thai", Georgia, serif;
+    }
+    .logo { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; }
+    .site-footer .tagline { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); }
+
+    .thanks {
+      min-height: calc(100vh - 65px - 120px);
+      min-height: calc(100svh - 65px - 120px);
+      display: grid;
+      place-items: center;
+      padding-block: 4rem;
+      text-align: center;
+    }
+    .thanks-title {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      line-height: 1.15;
+    }
+    .thanks-text {
+      margin: 1.25rem auto 0;
+      max-width: 40ch;
+      color: var(--ink-soft);
+    }
+    .thanks .btn { margin-top: 2.25rem; border-width: 1px; padding-inline: 2.2rem; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">Body Scent</a>
+      <ul class="nav">
+        <li><a href="index.html">หน้าแรก</a></li>
+        <li><a href="product.html">สินค้า</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="thanks">
+    <div class="container">
+      <h1 class="thanks-title">ขอบคุณที่สั่งซื้อ</h1>
+      <p class="thanks-text">เราได้รับออเดอร์ของคุณแล้ว ทีมงานจะติดต่อกลับเพื่อยืนยันโดยเร็วที่สุด</p>
+      <a class="btn btn-ghost" href="index.html">กลับหน้าแรก</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="tagline">Find Your Scent, Feel Your Best.</p>
+      <p>&copy; 2026 Body Scent</p>
+    </div>
+  </footer>
+
+</body>
+</html>

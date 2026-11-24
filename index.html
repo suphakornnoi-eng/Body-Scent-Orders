@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Body Scent — Your Mood. Your Scent. Your Signature.</title>
+  <meta name="description" content="Body Scent น้ำหอมฉีดตัวและโรลออน 4 อารมณ์ Fresh, Sweet, Confident, Romance เลือกกลิ่นที่เป็นคุณ">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Noto+Sans+Thai:wght@400;500&family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+Thai:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ส่วนเฉพาะหน้าแรก: โทนเรียบหรู เส้นบาง ตัวอักษร serif */
+    :root {
+      --font-serif: "Cormorant Garamond", "Noto Serif Thai", Georgia, serif;
+    }
+
+    .logo { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; }
+
+    /* Hero เต็มจอ */
+    .lux-hero {
+      min-height: calc(100vh - 65px);
+      min-height: calc(100svh - 65px);
+      display: grid;
+      place-items: center;
+      padding-block: 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .lux-title {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      font-size: clamp(2.8rem, 9vw, 6.5rem);
+      line-height: 1.08;
+      letter-spacing: -.01em;
+    }
+    .lux-title span { display: block; }
+    .lux-sub {
+      margin: 1.75rem auto 0;
+      max-width: 40ch;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+    }
+    .lux-hero .btn {
+      margin-top: 2.5rem;
+      border-width: 1px;
+      padding-inline: 2.2rem;
+    }
+
+    /* การ์ด 4 mood */
+    .moods-head { text-align: center; margin-bottom: 3rem; }
+    .moods-head .section-title { font-family: var(--font-serif); font-weight: 500; }
+    .moods-head .section-sub { margin-inline: auto; }
+
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.25rem;
+    }
+    .mood-card {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+      padding: 2rem 1.5rem 1.5rem;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      transition: border-color .2s ease;
+    }
+    .mood-card:hover { border-color: var(--ink-soft); }
+    .mood-name {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    /* สีของ mood แตะแค่เส้นใต้หัวข้อ */
+    .mood-name::after {
+      content: "";
+      display: block;
+      width: 32px;
+      height: 2px;
+      margin-top: .6rem;
+      background: var(--mood);
+    }
+    .mood-desc { flex: 1; color: var(--ink-soft); font-size: .95rem; }
+    .mood-link {
+      align-self: flex-start;
+      font-size: .9rem;
+      border-bottom: 1px solid transparent;
+    }
+    .mood-card:hover .mood-link { border-bottom-color: currentColor; }
+
+    .site-footer .tagline { font-family: var(--font-serif); font-size: 1.1rem; color: var(--ink); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">Body Scent</a>
+      <ul class="nav">
+        <li><a href="#moods">อารมณ์ของกลิ่น</a></li>
+        <li><a href="product.html">สินค้า</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <section class="lux-hero">
+      <div class="container">
+        <h1 class="lux-title">
+          <span>Your Mood.</span>
+          <span>Your Scent.</span>
+          <span>Your Signature.</span>
+        </h1>
+        <p class="lux-sub">อารมณ์ของคุณ กลิ่นของคุณ เอกลักษณ์ของคุณ</p>
+        <a class="btn btn-ghost" href="product.html">ดูสินค้าทั้งหมด</a>
+      </div>
+    </section>
+
+    <section class="section" id="moods">
+      <div class="container">
+        <div class="moods-head">
+          <h2 class="section-title">Wear Your Mood, Own Your Moment.</h2>
+          <p class="section-sub">ถ่ายทอดทุกอารมณ์ ผ่านกลิ่นหอมในแบบของคุณ</p>
+        </div>
+
+        <div class="mood-grid">
+          <a class="mood-card" data-mood="fresh" href="product.html?mood=fresh">
+            <h3 class="mood-name">Fresh</h3>
+            <p class="mood-desc">สดชื่น สะอาด เย็นสบาย</p>
+            <span class="mood-link">ดูสินค้า Fresh</span>
+          </a>
+
+          <a class="mood-card" data-mood="sweet" href="product.html?mood=sweet">
+            <h3 class="mood-name">Sweet</h3>
+            <p class="mood-desc">หอมหวาน น่ารัก อบอุ่น</p>
+            <span class="mood-link">ดูสินค้า Sweet</span>
+          </a>
+
+          <a class="mood-card" data-mood="confident" href="product.html?mood=confident">
+            <h3 class="mood-name">Confident</h3>
+            <p class="mood-desc">มั่นใจ โดดเด่น มีเสน่ห์</p>
+            <span class="mood-link">ดูสินค้า Confident</span>
+          </a>
+
+          <a class="mood-card" data-mood="romance" href="product.html?mood=romance">
+            <h3 class="mood-name">Romance</h3>
+            <p class="mood-desc">โรแมนติก นุ่มนวล ละมุน</p>
+            <span class="mood-link">ดูสินค้า Romance</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="tagline">Find Your Scent, Feel Your Best.</p>
+      <p>&copy; 2026 Body Scent</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

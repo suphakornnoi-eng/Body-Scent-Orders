@@ -1,0 +1,187 @@
+/* ==========================================================
+   Body Scent — script.js (ใช้ร่วมกันทุกหน้า)
+   แต่ละส่วนจะทำงานเฉพาะเมื่อหน้านั้นมี element ที่ต้องใช้
+   ========================================================== */
+
+(function () {
+  "use strict";
+
+  /* ---------- ค่าคงที่ ---------- */
+  var PRODUCTS_URL = "products.json";
+  var ORDER_PAGE = "order.html";
+
+  var MOODS = [
+    { key: "all", label: "ทั้งหมด" },
+    { key: "fresh", label: "Fresh" },
+    { key: "sweet", label: "Sweet" },
+    { key: "confident", label: "Confident" },
+    { key: "romance", label: "Romance" }
+  ];
+  var MOOD_KEYS = MOODS.map(function (m) { return m.key; });
+
+  /* ---------- ตัวช่วย ---------- */
+  function formatPrice(n) {
+    return Number(n).toLocaleString("th-TH") + " บาท";
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function moodLabel(key) {
+    var found = MOODS.filter(function (m) { return m.key === key; })[0];
+    return found ? found.label : key;
+  }
+
+  function buildOrderUrl(product) {
+    var params = new URLSearchParams({
+      item: product.name,
+      price: product.price
+    });
+    return ORDER_PAGE + "?" + params.toString();
+  }
+
+  /* ---------- หน้า product.html ---------- */
+  function initProductPage() {
+    var grid = document.getElementById("product-grid");
+    if (!grid) return; // ไม่ใช่หน้าสินค้า
+
+    var filterBox = document.getElementById("filters");
+    var products = [];
+    var currentMood = "all";
+
+    /* การ์ดสินค้า 1 ใบ */
+    function createCard(p) {
+      var card = el("article", "product-card");
+      card.dataset.mood = p.mood;
+
+      var media = el("div", "product-media");
+      var img = el("img");
+      img.src = p.image;
+      img.alt = p.name;
+      img.loading = "lazy";
+      media.appendChild(img);
+      media.appendChild(el("span", "product-badge", moodLabel(p.mood)));
+
+      var body = el("div", "product-body");
+      body.appendChild(el("h3", "product-name", p.name));
+
+      var meta = el("div", "product-meta");
+      meta.appendChild(
+        el("span", "product-size", p.size ? p.size : "โรลออน")
+      );
+      meta.appendChild(el("span", "product-price", formatPrice(p.price)));
+      body.appendChild(meta);
+
+      var buy = el("a", "btn", "สั่งซื้อ");
+      buy.href = buildOrderUrl(p);
+      body.appendChild(buy);
+
+      card.appendChild(media);
+      card.appendChild(body);
+      return card;
+    }
+
+    /* วาดการ์ดตาม mood ที่เลือก */
+    function render() {
+      grid.textContent = "";
+
+      var list = products.filter(function (p) {
+        return currentMood === "all" || p.mood === currentMood;
+      });
+
+      if (list.length === 0) {
+        grid.appendChild(el("p", "empty-state", "ยังไม่มีสินค้าในหมวดนี้"));
+        return;
+      }
+
+      list.forEach(function (p) {
+        grid.appendChild(createCard(p));
+      });
+    }
+
+    /* อัปเดตปุ่มกรอง + สีธีมของหน้า + URL */
+    function setMood(mood, updateUrl) {
+      currentMood = MOOD_KEYS.indexOf(mood) === -1 ? "all" : mood;
+
+      if (filterBox) {
+        filterBox.querySelectorAll(".filter-btn").forEach(function (btn) {
+          var active = (btn.dataset.filter || "all") === currentMood;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-pressed", String(active));
+        });
+      }
+
+      // ให้ CSS เปลี่ยนสีธีม (Hero ฯลฯ) ตาม mood ที่เลือก
+      if (currentMood === "all") {
+        delete document.body.dataset.mood;
+      } else {
+        document.body.dataset.mood = currentMood;
+      }
+
+      if (updateUrl) {
+        var url = new URL(window.location.href);
+        if (currentMood === "all") {
+          url.searchParams.delete("mood");
+        } else {
+          url.searchParams.set("mood", currentMood);
+        }
+        history.replaceState(null, "", url);
+      }
+
+      render();
+    }
+
+    /* สร้างปุ่มกรอง */
+    function buildFilters() {
+      if (!filterBox) return;
+      filterBox.textContent = "";
+
+      MOODS.forEach(function (m) {
+        var btn = el("button", "filter-btn", m.label);
+        btn.type = "button";
+        btn.dataset.filter = m.key;
+        if (m.key !== "all") btn.dataset.mood = m.key;
+        btn.addEventListener("click", function () {
+          setMood(m.key, true);
+        });
+        filterBox.appendChild(btn);
+      });
+    }
+
+    /* โหลดข้อมูลสินค้า */
+    grid.setAttribute("aria-busy", "true");
+
+    fetch(PRODUCTS_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        products = data;
+        buildFilters();
+
+        var moodFromUrl = new URLSearchParams(window.location.search).get("mood");
+        setMood(moodFromUrl ? moodFromUrl.toLowerCase() : "all", false);
+      })
+      .catch(function (err) {
+        console.error("โหลด products.json ไม่สำเร็จ:", err);
+        grid.textContent = "";
+        grid.appendChild(
+          el("p", "empty-state", "โหลดสินค้าไม่สำเร็จ กรุณารีเฟรชหน้าอีกครั้ง")
+        );
+      })
+      .finally(function () {
+        grid.removeAttribute("aria-busy");
+      });
+  }
+
+  /* ---------- เริ่มทำงาน ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    initProductPage();
+    // ฟังก์ชันของหน้าอื่นๆ (order.html ฯลฯ) จะเพิ่มต่อตรงนี้
+  });
+})();

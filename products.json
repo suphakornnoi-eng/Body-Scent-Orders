@@ -1,0 +1,102 @@
+[
+  {
+    "id": "fresh-spray-30",
+    "name": "น้ำหอมฉีดตัว Fresh เล็ก 30ml",
+    "mood": "fresh",
+    "type": "spray",
+    "size": "30ml",
+    "price": 89,
+    "image": "images/fresh.jpg",
+    "description": "กลิ่นสดชื่น สะอาด เย็นสบาย ขนาดพกพา ฉีดเติมได้ทั้งวัน"
+  },
+  {
+    "id": "fresh-spray-100",
+    "name": "น้ำหอมฉีดตัว Fresh ใหญ่ 100ml",
+    "mood": "fresh",
+    "type": "spray",
+    "size": "100ml",
+    "price": 199,
+    "image": "images/fresh.jpg",
+    "description": "กลิ่นสดชื่น สะอาด เย็นสบาย ขนาดคุ้มค่า ใช้ได้นานทุกวัน"
+  },
+  {
+    "id": "sweet-spray-30",
+    "name": "น้ำหอมฉีดตัว Sweet เล็ก 30ml",
+    "mood": "sweet",
+    "type": "spray",
+    "size": "30ml",
+    "price": 89,
+    "image": "images/sweet.jpg",
+    "description": "กลิ่นหอมหวาน น่ารัก อบอุ่น ขนาดพกพา หยิบใส่กระเป๋าได้ง่าย"
+  },
+  {
+    "id": "sweet-spray-100",
+    "name": "น้ำหอมฉีดตัว Sweet ใหญ่ 100ml",
+    "mood": "sweet",
+    "type": "spray",
+    "size": "100ml",
+    "price": 199,
+    "image": "images/sweet.jpg",
+    "description": "กลิ่นหอมหวาน น่ารัก อบอุ่น ขนาดคุ้มค่า ฉีดได้เต็มที่ทุกวัน"
+  },
+  {
+    "id": "confident-spray-30",
+    "name": "น้ำหอมฉีดตัว Confident เล็ก 30ml",
+    "mood": "confident",
+    "type": "spray",
+    "size": "30ml",
+    "price": 89,
+    "image": "images/confident.jpg",
+    "description": "กลิ่นมั่นใจ โดดเด่น มีเสน่ห์ ขนาดพกพา เติมความมั่นใจได้ทุกที่"
+  },
+  {
+    "id": "confident-spray-100",
+    "name": "น้ำหอมฉีดตัว Confident ใหญ่ 100ml",
+    "mood": "confident",
+    "type": "spray",
+    "size": "100ml",
+    "price": 199,
+    "image": "images/confident.jpg",
+    "description": "กลิ่นมั่นใจ โดดเด่น มีเสน่ห์ ขนาดคุ้มค่า พร้อมทุกการนัดสำคัญ"
+  },
+  {
+    "id": "romance-spray-30",
+    "name": "น้ำหอมฉีดตัว Romance เล็ก 30ml",
+    "mood": "romance",
+    "type": "spray",
+    "size": "30ml",
+    "price": 89,
+    "image": "images/romance.jpg",
+    "description": "กลิ่นโรแมนติก นุ่มนวล ละมุน ขนาดพกพา เหมาะกับทุกโมเมนต์พิเศษ"
+  },
+  {
+    "id": "romance-spray-100",
+    "name": "น้ำหอมฉีดตัว Romance ใหญ่ 100ml",
+    "mood": "romance",
+    "type": "spray",
+    "size": "100ml",
+    "price": 199,
+    "image": "images/romance.jpg",
+    "description": "กลิ่นโรแมนติก นุ่มนวล ละมุน ขนาดคุ้มค่า หอมติดตัวตลอดวัน"
+  },
+  {
+    "id": "fresh-rollon",
+    "name": "โรลออน Fresh",
+    "mood": "fresh",
+    "type": "rollon",
+    "size": null,
+    "price": 149,
+    "image": "images/fresh.jpg",
+    "description": "โรลออนกลิ่นสดชื่น สะอาด เย็นสบาย ทาง่าย พกพาสะดวก"
+  },
+  {
+    "id": "sweet-rollon",
+    "name": "โรลออน Sweet",
+    "mood": "sweet",
+    "type": "rollon",
+    "size": null,
+    "price": 149,
+    "image": "images/sweet.jpg",
+    "description": "โรลออนกลิ่นหอมหวาน น่ารัก อบอุ่น ทาง่าย พกพาสะดวก"
+  }
+]

@@ -1,0 +1,365 @@
+/* ==========================================================
+   Body Scent — script.js (ใช้ร่วมกันทุกหน้า)
+   แต่ละส่วนจะทำงานเฉพาะเมื่อหน้านั้นมี element ที่ต้องใช้
+
+   ID ที่ใช้:
+   - product.html : #filter-bar, #product-list
+   - order.html   : #orderForm, #customerName, #contact, #items, #total, #note
+   - admin.html   : #ordersTable tbody
+   ========================================================== */
+
+(function () {
+  "use strict";
+
+  /* ---------- ค่าคงที่ ---------- */
+  var PRODUCTS_URL = "products.json";
+  var ORDER_PAGE = "order.html";
+  var THANKYOU_PAGE = "thankyou.html";
+
+  var APPS_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxDiVNY0XzxgcSmO9ZI_TvU8Xymrhvu0MGz9TrlWPaXT-yKjnQpl2-mgNFvw4eLsxWo/exec";
+
+  var ORDERS_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQsLLzQpjh59j7cIK28NgcIyOUrBkeJ55etI2URtnNDHmKk63qLo_zS7QtntPIOO8R2IF-YIx1Hj-s2/pub?gid=0&single=true&output=csv";
+
+  var MOODS = [
+    { key: "all", label: "ทั้งหมด" },
+    { key: "fresh", label: "Fresh" },
+    { key: "sweet", label: "Sweet" },
+    { key: "confident", label: "Confident" },
+    { key: "romance", label: "Romance" }
+  ];
+  var MOOD_KEYS = MOODS.map(function (m) { return m.key; });
+
+  /* ---------- ตัวช่วย ---------- */
+  function formatPrice(n) {
+    return Number(n).toLocaleString("th-TH") + " บาท";
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function moodLabel(key) {
+    var found = MOODS.filter(function (m) { return m.key === key; })[0];
+    return found ? found.label : key;
+  }
+
+  function buildOrderUrl(product) {
+    var params = new URLSearchParams({
+      item: product.name,
+      price: product.price
+    });
+    return ORDER_PAGE + "?" + params.toString();
+  }
+
+  /* ==========================================================
+     1) หน้า product.html
+     ========================================================== */
+  function initProductPage() {
+    var grid = document.getElementById("product-list");
+    if (!grid) return; // ไม่ใช่หน้าสินค้า
+
+    var filterBox = document.getElementById("filter-bar");
+    var products = [];
+    var currentMood = "all";
+
+    /* การ์ดสินค้า 1 ใบ */
+    function createCard(p) {
+      var card = el("article", "product-card");
+      card.dataset.mood = p.mood;
+
+      var media = el("div", "product-media");
+      var img = el("img");
+      img.src = p.image;
+      img.alt = p.name;
+      img.loading = "lazy";
+      media.appendChild(img);
+      media.appendChild(el("span", "product-badge", moodLabel(p.mood)));
+
+      var body = el("div", "product-body");
+      body.appendChild(el("h3", "product-name", p.name));
+
+      var meta = el("div", "product-meta");
+      meta.appendChild(
+        el("span", "product-size", p.size ? p.size : "โรลออน")
+      );
+      meta.appendChild(el("span", "product-price", formatPrice(p.price)));
+      body.appendChild(meta);
+
+      var buy = el("a", "btn", "สั่งซื้อ");
+      buy.href = buildOrderUrl(p);
+      body.appendChild(buy);
+
+      card.appendChild(media);
+      card.appendChild(body);
+      return card;
+    }
+
+    /* วาดการ์ดตาม mood ที่เลือก */
+    function render() {
+      grid.textContent = "";
+
+      var list = products.filter(function (p) {
+        return currentMood === "all" || p.mood === currentMood;
+      });
+
+      if (list.length === 0) {
+        grid.appendChild(el("p", "empty-state", "ยังไม่มีสินค้าในหมวดนี้"));
+        return;
+      }
+
+      list.forEach(function (p) {
+        grid.appendChild(createCard(p));
+      });
+    }
+
+    /* อัปเดตปุ่มกรอง + สีธีมของหน้า + URL */
+    function setMood(mood, updateUrl) {
+      currentMood = MOOD_KEYS.indexOf(mood) === -1 ? "all" : mood;
+
+      if (filterBox) {
+        filterBox.querySelectorAll(".filter-btn").forEach(function (btn) {
+          var active = (btn.dataset.filter || "all") === currentMood;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-pressed", String(active));
+        });
+      }
+
+      // ให้ CSS เปลี่ยนสีธีม (Hero ฯลฯ) ตาม mood ที่เลือก
+      if (currentMood === "all") {
+        delete document.body.dataset.mood;
+      } else {
+        document.body.dataset.mood = currentMood;
+      }
+
+      if (updateUrl) {
+        var url = new URL(window.location.href);
+        if (currentMood === "all") {
+          url.searchParams.delete("mood");
+        } else {
+          url.searchParams.set("mood", currentMood);
+        }
+        history.replaceState(null, "", url);
+      }
+
+      render();
+    }
+
+    /* สร้างปุ่มกรอง */
+    function buildFilters() {
+      if (!filterBox) return;
+      filterBox.textContent = "";
+
+      MOODS.forEach(function (m) {
+        var btn = el("button", "filter-btn", m.label);
+        btn.type = "button";
+        btn.dataset.filter = m.key;
+        if (m.key !== "all") btn.dataset.mood = m.key;
+        btn.addEventListener("click", function () {
+          setMood(m.key, true);
+        });
+        filterBox.appendChild(btn);
+      });
+    }
+
+    /* โหลดข้อมูลสินค้า */
+    grid.setAttribute("aria-busy", "true");
+
+    fetch(PRODUCTS_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        products = data;
+        buildFilters();
+
+        var moodFromUrl = new URLSearchParams(window.location.search).get("mood");
+        setMood(moodFromUrl ? moodFromUrl.toLowerCase() : "all", false);
+      })
+      .catch(function (err) {
+        console.error("โหลด products.json ไม่สำเร็จ:", err);
+        grid.textContent = "";
+        grid.appendChild(
+          el("p", "empty-state", "โหลดสินค้าไม่สำเร็จ กรุณารีเฟรชหน้าอีกครั้ง")
+        );
+      })
+      .finally(function () {
+        grid.removeAttribute("aria-busy");
+      });
+  }
+
+  /* ==========================================================
+     2) หน้า order.html
+     ========================================================== */
+  function initOrderPage() {
+    var form = document.getElementById("orderForm");
+    if (!form) return; // ไม่ใช่หน้าสั่งซื้อ
+
+    var itemsInput = document.getElementById("items");
+    var totalInput = document.getElementById("total");
+
+    /* เติมค่าจาก URL ลงฟอร์มทันทีที่โหลดหน้า (ทั้ง items และ total) */
+    var params = new URLSearchParams(window.location.search);
+    var item = params.get("item");
+    var price = params.get("price");
+
+    if (itemsInput && item) itemsInput.value = item;
+    if (totalInput && price) totalInput.value = price;
+
+    function val(id) {
+      var node = document.getElementById(id);
+      return node ? node.value.trim() : "";
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var payload = {
+        customerName: val("customerName"),
+        contact: val("contact"),
+        items: val("items"),
+        total: val("total"),
+        note: val("note")
+      };
+
+      var submitBtn = form.querySelector('[type="submit"]');
+      if (submitBtn) submitBtn.disabled = true;
+
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+      .then(() => { window.location.href = THANKYOU_PAGE; })
+      .catch(error => {
+        console.error(error);
+        if (submitBtn) submitBtn.disabled = false;
+        alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง');
+      });
+    });
+  }
+
+  /* ==========================================================
+     3) หน้า admin.html
+     ========================================================== */
+
+  /* parse CSV เอง: รองรับ "..." , "" (เครื่องหมายคำพูดซ้อน),
+     ขึ้นบรรทัดใหม่ในช่อง, และ \r\n */
+  function parseCSV(text) {
+    var rows = [];
+    var row = [];
+    var field = "";
+    var inQuotes = false;
+
+    if (text.charCodeAt(0) === 0xfeff) text = text.slice(1); // ตัด BOM
+
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ",") {
+        row.push(field);
+        field = "";
+      } else if (ch === "\n" || ch === "\r") {
+        if (ch === "\r" && text[i + 1] === "\n") i++;
+        row.push(field);
+        rows.push(row);
+        row = [];
+        field = "";
+      } else {
+        field += ch;
+      }
+    }
+
+    // แถวสุดท้ายที่ไม่มี newline ปิดท้าย
+    if (field !== "" || row.length > 0) {
+      row.push(field);
+      rows.push(row);
+    }
+
+    // ตัดแถวว่างทิ้ง
+    return rows.filter(function (r) {
+      return r.some(function (c) { return c.trim() !== ""; });
+    });
+  }
+
+  function initAdminPage() {
+    var tbody = document.querySelector("#ordersTable tbody");
+    if (!tbody) return; // ไม่ใช่หน้า admin
+
+    var COLUMNS = 6; // วันเวลา, ชื่อ, ติดต่อ, รายการ, ยอดรวม, หมายเหตุ
+
+    function showMessage(text) {
+      tbody.textContent = "";
+      var tr = el("tr");
+      var td = el("td", "empty-state", text);
+      td.colSpan = COLUMNS;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+    }
+
+    function renderOrders(rows) {
+      tbody.textContent = "";
+
+      if (rows.length === 0) {
+        showMessage("ยังไม่มีรายการสั่งซื้อ");
+        return;
+      }
+
+      rows.forEach(function (r) {
+        var tr = el("tr");
+        for (var c = 0; c < COLUMNS; c++) {
+          var cell = r[c] !== undefined ? r[c] : "";
+
+          // ยอดรวม (คอลัมน์ที่ 5) ถ้าเป็นตัวเลขให้ใส่ , คั่นหลักพัน
+          if (c === 4 && cell !== "" && !isNaN(Number(cell))) {
+            cell = Number(cell).toLocaleString("th-TH");
+          }
+          tr.appendChild(el("td", "", cell));
+        }
+        tbody.appendChild(tr);
+      });
+    }
+
+    showMessage("กำลังโหลดข้อมูล...");
+
+    fetch(ORDERS_CSV_URL)
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var rows = parseCSV(text);
+        rows.shift(); // ตัดแถวหัวตาราง
+        rows.reverse(); // ชีตเพิ่มแถวใหม่ไว้ล่างสุด → กลับด้านให้ล่าสุดขึ้นก่อน
+        renderOrders(rows);
+      })
+      .catch(function (err) {
+        console.error("โหลดข้อมูลออเดอร์ไม่สำเร็จ:", err);
+        showMessage("โหลดข้อมูลไม่สำเร็จ กรุณารีเฟรชหน้าอีกครั้ง");
+      });
+  }
+
+  /* ---------- เริ่มทำงาน ---------- */
+  document.addEventListener("DOMContentLoaded", function () {
+    initProductPage();
+    initOrderPage();
+    initAdminPage();
+  });
+})();
